@@ -1,0 +1,20 @@
+﻿ 
+@{
+  ViewBag.Title = "Index";
+  Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+<h4>This is the First page!</h4>
+<div>
+  Message from server:
+</div>
+<p>
+  @ViewBag.ThisCanBeEverything
+</p>
+<div>
+  Message from server:
+</div>
+<input id="myinput" type="text" placeholder="type any text"/>
+<button type="submit" onclick="alert(document.getElementById("myinput").value)">Send to server</button>
+
