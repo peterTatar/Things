@@ -7,7 +7,7 @@ using System.Net.Http;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web;
-
+using System.Web.Http.Results;
 
 namespace DatabaseMenu.Controllers
 {
@@ -26,7 +26,7 @@ namespace DatabaseMenu.Controllers
         {
             Models.Person pe = new Models.Person();
             string databeseMessage;
-            using (SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Temp\DatabaseMenu\DatabaseMenu\App_Data\Database2.mdf;Integrated Security=True"))
+            using (SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database2.mdf;Integrated Security=True"))
             {
                 
                 connection.Open();
@@ -44,20 +44,20 @@ namespace DatabaseMenu.Controllers
         }
 
         // POST api/<controller>
-        public void Post([FromBody]string value)
+        public JsonResult<int> Post([FromBody]string value)
         {
             
-            using (SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Temp\DatabaseMenu\DatabaseMenu\App_Data\Database2.mdf;Integrated Security=True"))
+            using (SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database2.mdf;Integrated Security=True"))
             {
-                string nev = "'"+value+"'";
+                string nev = value;
                 connection.Open();
-                string query= "INSERT Into Szemelyek(Name) Values ('"+nev+"')";
+                string query= "INSERT Into Szemelyek(Name) output INSERTED.ID Values ('" + nev + "')";
                 SqlCommand command = new SqlCommand(query, connection);
-                command.ExecuteNonQuery();
+                int result = (int)command.ExecuteScalar();
                 connection.Close();
 
+              return Json(result);
             }
-            
         }
 
         // PUT api/<controller>/5

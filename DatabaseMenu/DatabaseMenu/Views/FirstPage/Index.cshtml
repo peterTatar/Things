@@ -20,15 +20,24 @@
     <button id="BtnSendDataToDb" type="submit">Feltölt</button>
 
 
-
+    <p>
+      Az új rekord azonosítója: <span id="uploadResult"></span>
+    </p>
+    
 
 </div>
 
 
-<p>
-    @ViewBag.ThisCanBeEverything
-
-</p>
+<div>
+  <h2>Following names exist in the database at @DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"):</h2>
+  @{
+    foreach (string name in ViewBag.Names) {
+      <div>
+        @name
+      </div>
+    }
+  }
+</div>
 <p id="request">request</p>
 
 
@@ -36,12 +45,15 @@
     var buttonA = document.getElementById("BtnSendDataToDb");
     buttonA.onclick = function () {
         var str = document.getElementById("nev");
+        var requestBody = JSON.stringify(str.value);
+
         var request = new XMLHttpRequest();
-        request.open("POST", "/api/value/" + str.value);
-        request.onload = function () { };
-        request.send();
-        var strnev = document.getElementById("request");
-        
+        request.open("POST", "/api/value");
+        request.setRequestHeader("Content-Type", "application/json");
+        request.onload = function() {
+          document.getElementById("uploadResult").innerText = request.responseText;
+        };
+        request.send(requestBody);
     }
 </script>
 
@@ -51,10 +63,10 @@
         var str = document.getElementById("inputId");
         var request = new XMLHttpRequest();
         request.open("GET", "/api/value/" + str.value);
-        request.onload = function () { };
+        request.onload = function() {
+          alert(request.responseText);
+        };
         request.send();
-        var strnev = document.getElementById("request");
-        alert(request.responseText);
     };
     
 

@@ -9,22 +9,26 @@ namespace DatabaseMenu.Controllers
 {
     public class FirstPageController : Controller
     {
-        // GET: FirstPage
-        public void DataRequest(int id) {
-            using (SqlConnection connection = new SqlConnection(@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=C:\Temp\DatabaseMenu\DatabaseMenu\App_Data\Database2.mdf;Integrated Security=True"))
+        public List<string> GetNames() {
+            using (SqlConnection connection = new SqlConnection($@"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\Database2.mdf;Integrated Security=True"))
             {
                 connection.Open();
                 SqlCommand command = connection.CreateCommand();
-                command.CommandText = "SELECT Name FROM Szemelyek WHERE Id="+id.ToString();
+                command.CommandText = "SELECT Name FROM Szemelyek";
+          
+                List<string> names = new List<string>();
                 var reader = command.ExecuteReader();
-                reader.Read();
-                string databeseMessage = reader.GetString(0);
-                ViewBag.ThisCanBeEverything = "Your database content: " + databeseMessage;
+                while (reader.Read()) {
+                  string name = reader.GetString(0);
+                  names.Add(name);
+                }
+                return names;
             }
         }
+
         public ActionResult Index()
         {
-            DataRequest(3);
+            ViewBag.Names = GetNames();
             return View();
         }
     }
