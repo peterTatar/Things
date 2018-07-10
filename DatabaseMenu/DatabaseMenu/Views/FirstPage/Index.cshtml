@@ -1,0 +1,61 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2>Index</h2>
+<div>First Page</div>
+<div>
+    <p>Kérem az ID-t:</p>
+    <input id="inputId" type="number" placeholder="Ide egy számot pls." />
+    <button id="BtnGetDB" type="submit">Gomb</button>
+
+</div>
+<div>
+    <p id="text">Adatok feltöltése</p>
+    <p>A feltölteni kivánt személy neve:</p>
+    <input id="nev" type="text" placeholder="Név" />
+    <button id="BtnSendDataToDb" type="submit">Feltölt</button>
+
+
+
+
+</div>
+
+
+<p>
+    @ViewBag.ThisCanBeEverything
+
+</p>
+<p id="request">request</p>
+
+
+<script>
+    var buttonA = document.getElementById("BtnSendDataToDb");
+    buttonA.onclick = function () {
+        var str = document.getElementById("nev");
+        var request = new XMLHttpRequest();
+        request.open("POST", "/api/value/" + str.value);
+        request.onload = function () { };
+        request.send();
+        var strnev = document.getElementById("request");
+        
+    }
+</script>
+
+<script>
+    var button = document.getElementById("BtnGetDB");
+    button.onclick = function () {
+        var str = document.getElementById("inputId");
+        var request = new XMLHttpRequest();
+        request.open("GET", "/api/value/" + str.value);
+        request.onload = function () { };
+        request.send();
+        var strnev = document.getElementById("request");
+        alert(request.responseText);
+    };
+    
+
+</script>
